@@ -323,6 +323,13 @@ export const projects: Project[] = [
     technicalExperience: ['Apple 로그인 연동', '카카오/네이버/Apple 소셜 로그인 구현'],
     tags: ['android', 'ios', 'webview'],
     accentColor: '#00d4ff',
+        thumbnail: '/img/ABYS/abys_thumbnail.png',
+    images: [
+      '/img/ABYS/abys_1.png',
+      '/img/ABYS/abys_2.png',
+      '/img/ABYS/abys_3.png',
+      '/img/ABYS/abys_4.png',
+    ],
   },
 
   {
