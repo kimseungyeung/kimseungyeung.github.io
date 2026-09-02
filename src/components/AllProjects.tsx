@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { projects } from '../data/projects';
 import type { FilterTag, Project } from '../types';
 import { SectionHeader } from './About';
@@ -17,15 +17,26 @@ const FILTERS: { label: string; value: FilterTag }[] = [
 
 interface Props {
   onSelect: (project: Project) => void;
+  companyFilter: string | null;
+  onClearCompanyFilter: () => void;
 }
 
-export default function AllProjects({ onSelect }: Props) {
+export default function AllProjects({ onSelect, companyFilter, onClearCompanyFilter }: Props) {
   const [activeFilter, setActiveFilter] = useState<FilterTag>('all');
 
+  // 회사 필터가 새로 들어오면 태그 필터는 초기화해서 서로 안 꼬이게 함
+  useEffect(() => {
+    if (companyFilter) setActiveFilter('all');
+  }, [companyFilter]);
+
   const filtered = useMemo(() => {
-    if (activeFilter === 'all') return projects;
-    return projects.filter((p) => p.tags.includes(activeFilter));
-  }, [activeFilter]);
+    let base = projects;
+    if (companyFilter) {
+      base = base.filter((p) => p.company === companyFilter);
+    }
+    if (activeFilter === 'all') return base;
+    return base.filter((p) => p.tags.includes(activeFilter));
+  }, [activeFilter, companyFilter]);
 
   return (
     <section id="projects" className="py-24 md:py-32 bg-[#0a0a14]">
@@ -36,6 +47,25 @@ export default function AllProjects({ onSelect }: Props) {
             {filtered.length} project{filtered.length !== 1 ? 's' : ''}
           </p>
         </div>
+
+        {/* 회사 필터 배지 */}
+        {companyFilter && (
+          <div className="flex items-center gap-2 mb-6">
+            <span
+              className="text-[10px] font-mono tracking-widest px-2 py-1 rounded-sm bg-[#00d4ff] text-[#07070f]"
+              style={{ fontFamily: 'var(--font-mono)' }}
+            >
+              {companyFilter}
+            </span>
+            <button
+              onClick={onClearCompanyFilter}
+              className="text-[10px] font-mono tracking-widest text-[#6a6a88] hover:text-[#eeeef8] transition-colors"
+              style={{ fontFamily: 'var(--font-mono)' }}
+            >
+              전체 보기 ✕
+            </button>
+          </div>
+        )}
 
         {/* Filters */}
         <div className="flex flex-wrap gap-2 mb-10">
@@ -82,13 +112,11 @@ function ProjectCard({ project, onSelect }: { project: Project; onSelect: (p: Pr
       onClick={() => onSelect(project)}
       className="group relative text-left w-full bg-[#0d0d1a] border border-[rgba(255,255,255,0.07)] rounded-sm p-5 hover:border-[rgba(255,255,255,0.18)] transition-all duration-300 overflow-hidden flex flex-col"
     >
-      {/* Accent line */}
       <div
         className="absolute top-0 left-0 right-0 h-px z-10"
         style={{ backgroundColor: accent, opacity: 0.4 }}
       />
 
-      {/* Thumbnail */}
       {project.thumbnail && (
         <div className="-mx-5 -mt-5 mb-4 h-32 bg-[#06060f] overflow-hidden">
           <img
@@ -99,7 +127,6 @@ function ProjectCard({ project, onSelect }: { project: Project; onSelect: (p: Pr
         </div>
       )}
 
-      {/* Header */}
       <div className="flex items-start justify-between gap-2 mb-3">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1.5">
@@ -133,7 +160,6 @@ function ProjectCard({ project, onSelect }: { project: Project; onSelect: (p: Pr
         </div>
       </div>
 
-      {/* Meta */}
       <div className="flex items-center gap-3 mb-3">
         <span className="text-[10px] font-mono text-[#6a6a88]" style={{ fontFamily: 'var(--font-mono)' }}>
           {project.period}
@@ -148,7 +174,6 @@ function ProjectCard({ project, onSelect }: { project: Project; onSelect: (p: Pr
         {project.shortDescription}
       </p>
 
-      {/* Tags */}
       <div className="flex flex-wrap gap-1.5 mt-auto">
         {project.tags
           .filter((t) => t !== 'all' && t !== 'personal')
@@ -163,7 +188,6 @@ function ProjectCard({ project, onSelect }: { project: Project; onSelect: (p: Pr
           ))}
       </div>
 
-      {/* Role */}
       <div className="mt-3 pt-3 border-t border-[rgba(255,255,255,0.05)] flex items-center justify-between">
         <span className="text-[10px] text-[#6a6a88]">{project.role}</span>
         <span
