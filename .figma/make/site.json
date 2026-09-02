@@ -1,0 +1,10 @@
+{
+  "description": "Showcases a mobile developer's career, skills, and projects in a clean, responsive portfolio that highlights expertise and recent personal work for recruiters.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

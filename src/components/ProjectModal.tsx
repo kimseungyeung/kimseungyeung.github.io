@@ -1,0 +1,265 @@
+import { useEffect } from 'react';
+import type { Project } from '../types';
+
+interface Props {
+  project: Project | null;
+  onClose: () => void;
+}
+
+export default function ProjectModal({ project, onClose }: Props) {
+  useEffect(() => {
+    if (!project) return;
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
+    document.addEventListener('keydown', onKey);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = '';
+    };
+  }, [project, onClose]);
+
+  if (!project) return null;
+
+  const accent = project.accentColor ?? '#00d4ff';
+
+  return (
+    <div
+      className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4"
+      onClick={(e) => e.target === e.currentTarget && onClose()}
+    >
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-[rgba(7,7,15,0.85)] backdrop-blur-sm" onClick={onClose} />
+
+      {/* Modal */}
+      <div
+        className="relative z-10 w-full sm:max-w-2xl max-h-[92vh] sm:max-h-[85vh] bg-[#0d0d1a] border border-[rgba(255,255,255,0.12)] sm:rounded-sm overflow-hidden flex flex-col"
+        style={{ boxShadow: `0 0 60px rgba(0,0,0,0.8), 0 0 0 1px ${accent}20` }}
+      >
+        {/* Header */}
+        <div
+          className="flex-shrink-0 p-6 md:p-8 border-b border-[rgba(255,255,255,0.07)]"
+          style={{ borderTopColor: accent, borderTopWidth: 1 }}
+        >
+          {/* Type badge */}
+          <div className="flex items-center gap-2 mb-3">
+            <span
+              className="text-[9px] font-mono tracking-widest px-2 py-1 rounded-sm"
+              style={{
+                fontFamily: 'var(--font-mono)',
+                color: accent,
+                backgroundColor: `${accent}15`,
+                border: `1px solid ${accent}30`,
+              }}
+            >
+              {project.type === 'personal' ? 'PERSONAL PROJECT' : project.company}
+            </span>
+            {project.period && (
+              <span
+                className="text-[9px] font-mono text-[#6a6a88] tracking-widest"
+                style={{ fontFamily: 'var(--font-mono)' }}
+              >
+                {project.period}
+              </span>
+            )}
+          </div>
+
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h2
+                className="text-2xl md:text-3xl font-bold text-[#eeeef8] mb-1"
+                style={{ fontFamily: 'var(--font-display)' }}
+              >
+                {project.name}
+              </h2>
+              <p className="text-sm text-[#6a6a88]">{project.role}</p>
+            </div>
+            <button
+              onClick={onClose}
+              className="flex-shrink-0 w-8 h-8 flex items-center justify-center text-[#6a6a88] hover:text-[#eeeef8] border border-[rgba(255,255,255,0.1)] hover:border-[rgba(255,255,255,0.25)] rounded-sm transition-all"
+            >
+              ✕
+            </button>
+          </div>
+
+          {/* Platform tags */}
+          <div className="flex flex-wrap gap-1.5 mt-4">
+            {project.platform.map((p) => (
+              <span
+                key={p}
+                className="px-2 py-0.5 text-[9px] font-mono tracking-wider rounded-sm"
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  color: accent,
+                  backgroundColor: `${accent}10`,
+                  border: `1px solid ${accent}20`,
+                }}
+              >
+                {p}
+              </span>
+            ))}
+            {project.tags
+              .filter((t) => t !== 'all' && t !== 'personal')
+              .map((t) => (
+                <span
+                  key={t}
+                  className="px-2 py-0.5 text-[9px] font-mono tracking-wider text-[#6a6a88] border border-[rgba(255,255,255,0.07)] rounded-sm uppercase"
+                  style={{ fontFamily: 'var(--font-mono)' }}
+                >
+                  {t}
+                </span>
+              ))}
+          </div>
+        </div>
+
+        {/* Scrollable content */}
+        <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-8">
+          {/* Image gallery */}
+          {project.images && project.images.length > 0 && (
+            <div>
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-1 h-4 rounded-full" style={{ backgroundColor: accent }} />
+                <h4
+                  className="text-[11px] font-mono tracking-[0.2em] text-[#eeeef8]"
+                  style={{ fontFamily: 'var(--font-mono)' }}
+                >
+                  SCREENSHOTS
+                </h4>
+              </div>
+              <div
+                className="flex gap-3 overflow-x-auto pb-2 -mx-6 md:-mx-8 px-6 md:px-8"
+                style={{ scrollbarWidth: 'none' }}
+              >
+                {project.images.map((src, i) => (
+                  <div
+                    key={i}
+                    className="flex-shrink-0 h-60 bg-[#06060f] rounded-sm border border-[rgba(255,255,255,0.06)] overflow-hidden flex items-center justify-center"
+                  >
+                    <img
+                      src={src}
+                      alt={`${project.name} ${i + 1}`}
+                      className="h-full w-auto max-w-xs object-contain"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Overview */}
+          <Section title="Overview" accent={accent}>
+            <p className="text-[#9090b0] text-sm leading-relaxed">{project.overview}</p>
+          </Section>
+
+          {/* Tech Stack */}
+          <Section title="Tech Stack" accent={accent}>
+            <div className="flex flex-wrap gap-2">
+              {project.techStack.map((tech) => (
+                <span
+                  key={tech}
+                  className="px-3 py-1 text-[11px] font-mono text-[#eeeef8] border border-[rgba(255,255,255,0.12)] rounded-sm"
+                  style={{ fontFamily: 'var(--font-mono)' }}
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
+          </Section>
+
+          {/* Key Features */}
+          {project.keyFeatures.length > 0 && (
+            <Section title="Key Features" accent={accent}>
+              <ul className="space-y-2">
+                {project.keyFeatures.map((f) => (
+                  <li key={f} className="flex items-start gap-2 text-sm text-[#9090b0]">
+                    <span style={{ color: accent }} className="mt-1 flex-shrink-0 text-xs">◆</span>
+                    <span>{f}</span>
+                  </li>
+                ))}
+              </ul>
+            </Section>
+          )}
+
+          {/* Responsibilities */}
+          {project.responsibilities.length > 0 && (
+            <Section title="Responsibilities" accent={accent}>
+              <ul className="space-y-2">
+                {project.responsibilities.map((r) => (
+                  <li key={r} className="flex items-start gap-2 text-sm text-[#9090b0]">
+                    <span style={{ color: accent }} className="mt-1 flex-shrink-0">▸</span>
+                    <span>{r}</span>
+                  </li>
+                ))}
+              </ul>
+            </Section>
+          )}
+
+          {/* Technical Experience */}
+          {project.technicalExperience && project.technicalExperience.length > 0 && (
+            <Section title="Technical Experience" accent={accent}>
+              <div className="space-y-2">
+                {project.technicalExperience.map((t) => (
+                  <div
+                    key={t}
+                    className="flex items-start gap-3 p-3 bg-[#0a0a14] border border-[rgba(255,255,255,0.05)] rounded-sm"
+                  >
+                    <span style={{ color: accent }} className="text-xs mt-0.5 flex-shrink-0">✓</span>
+                    <span className="text-sm text-[#9090b0]">{t}</span>
+                  </div>
+                ))}
+              </div>
+            </Section>
+          )}
+
+          {/* Contribution if present */}
+          {project.contribution && (
+            <Section title="Contribution" accent={accent}>
+              <p className="text-[#9090b0] text-sm">{project.contribution}</p>
+            </Section>
+          )}
+        </div>
+
+        {/* Footer */}
+        <div className="flex-shrink-0 px-6 md:px-8 py-4 border-t border-[rgba(255,255,255,0.07)] flex items-center justify-between">
+          <span
+            className="text-[10px] font-mono text-[#6a6a88]"
+            style={{ fontFamily: 'var(--font-mono)' }}
+          >
+            {project.name}
+          </span>
+          <button
+            onClick={onClose}
+            className="text-[11px] font-mono tracking-widest text-[#6a6a88] hover:text-[#eeeef8] transition-colors"
+            style={{ fontFamily: 'var(--font-mono)' }}
+          >
+            CLOSE ✕
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Section({
+  title,
+  accent,
+  children,
+}: {
+  title: string;
+  accent: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div>
+      <div className="flex items-center gap-3 mb-4">
+        <div className="w-1 h-4 rounded-full" style={{ backgroundColor: accent }} />
+        <h4
+          className="text-[11px] font-mono tracking-[0.2em] text-[#eeeef8]"
+          style={{ fontFamily: 'var(--font-mono)' }}
+        >
+          {title.toUpperCase()}
+        </h4>
+      </div>
+      {children}
+    </div>
+  );
+}
