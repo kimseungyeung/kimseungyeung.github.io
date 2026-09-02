@@ -46,6 +46,14 @@ export const projects: Project[] = [
     tags: ['android'],
     isFeatured: true,
     accentColor: '#00d4ff',
+        thumbnail: '/img/워크온/KakaoTalk_20260521_014018564_06 2.png',
+    images: [
+      '/img/워크온/KakaoTalk_20260521_014018564_06 1.png',
+      '/img/워크온/KakaoTalk_20260521_014018564_05 1.png',
+      '/img/워크온/KakaoTalk_20260521_014018564 1.png',
+      '/img/워크온/KakaoTalk_20260521_014018564_02 1.png',
+      '/img/워크온/KakaoTalk_20260521_014018564_03 1.png',
+    ],
   },
 
   // ─── 임팩트컴퍼니 (2020.08 ~ 2023.11) ─────────────────────────────────────
