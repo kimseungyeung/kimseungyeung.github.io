@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Project } from '../types';
 
 interface Props {
@@ -8,6 +8,12 @@ interface Props {
 
 export default function ProjectModal({ project, onClose }: Props) {
   const [zoomedImage, setZoomedImage] = useState<string | null>(null);
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const dragState = useRef<{ startX: number; startScroll: number; dragging: boolean }>({
+    startX: 0,
+    startScroll: 0,
+    dragging: false,
+  });
 
   useEffect(() => {
     if (!project) return;
@@ -27,10 +33,36 @@ export default function ProjectModal({ project, onClose }: Props) {
     };
   }, [project, onClose, zoomedImage]);
 
-  // 프로젝트가 바뀌면 확대 상태 초기화
   useEffect(() => {
     setZoomedImage(null);
   }, [project]);
+
+  // 마우스 휠(세로) → 가로 스크롤 변환
+  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    if (el.scrollWidth <= el.clientWidth) return; // 스크롤 필요 없으면 무시
+    // 세로 휠 값이 가로 값보다 크면 가로 스크롤로 사용
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+      el.scrollLeft += e.deltaY;
+      e.preventDefault();
+    }
+  };
+
+  // 마우스 드래그로 스크롤 (데스크톱 편의용)
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    dragState.current = { startX: e.clientX, startScroll: el.scrollLeft, dragging: true };
+  };
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!dragState.current.dragging || !scrollerRef.current) return;
+    const dx = e.clientX - dragState.current.startX;
+    scrollerRef.current.scrollLeft = dragState.current.startScroll - dx;
+  };
+  const endDrag = () => {
+    dragState.current.dragging = false;
+  };
 
   if (!project) return null;
 
@@ -41,15 +73,13 @@ export default function ProjectModal({ project, onClose }: Props) {
       className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4"
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
-      {/* Backdrop */}
       <div className="absolute inset-0 bg-[rgba(7,7,15,0.85)] backdrop-blur-sm" onClick={onClose} />
 
-      {/* Modal */}
       <div
         className="relative z-10 w-full sm:max-w-2xl max-h-[92vh] sm:max-h-[85vh] bg-[#0d0d1a] border border-[rgba(255,255,255,0.12)] sm:rounded-sm overflow-hidden flex flex-col"
         style={{ boxShadow: `0 0 60px rgba(0,0,0,0.8), 0 0 0 1px ${accent}20` }}
       >
-        {/* Header */}
+        {/* Header (동일, 생략 없이 유지) */}
         <div
           className="flex-shrink-0 p-6 md:p-8 border-b border-[rgba(255,255,255,0.07)]"
           style={{ borderTopColor: accent, borderTopWidth: 1 }}
@@ -123,9 +153,7 @@ export default function ProjectModal({ project, onClose }: Props) {
           </div>
         </div>
 
-        {/* Scrollable content */}
         <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-8">
-          {/* Image gallery */}
           {project.images && project.images.length > 0 && (
             <div>
               <div className="flex items-center gap-3 mb-3">
@@ -138,8 +166,14 @@ export default function ProjectModal({ project, onClose }: Props) {
                 </h4>
               </div>
               <div
-                className="flex gap-3 overflow-x-auto overflow-y-hidden pb-2 -mx-6 md:-mx-8 px-6 md:px-8"
-                style={{ scrollbarWidth: 'none' }}
+                ref={scrollerRef}
+                className="flex gap-3 overflow-x-auto overflow-y-hidden pb-2 -mx-6 md:-mx-8 px-6 md:px-8 cursor-grab active:cursor-grabbing select-none"
+                style={{ scrollbarWidth: 'thin' }}
+                onWheel={handleWheel}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={endDrag}
+                onMouseLeave={endDrag}
               >
                 {project.images.map((src, i) => (
                   <div
@@ -149,7 +183,8 @@ export default function ProjectModal({ project, onClose }: Props) {
                     <img
                       src={src}
                       alt={`${project.name} ${i + 1}`}
-                      className="h-full w-auto object-contain cursor-zoom-in transition-transform duration-150 hover:scale-[1.02]"
+                      className="h-full w-auto object-contain cursor-zoom-in transition-transform duration-150 hover:scale-[1.02] pointer-events-auto"
+                      draggable={false}
                       onClick={() => setZoomedImage(src)}
                     />
                   </div>
@@ -225,7 +260,6 @@ export default function ProjectModal({ project, onClose }: Props) {
           )}
         </div>
 
-        {/* Footer */}
         <div className="flex-shrink-0 px-6 md:px-8 py-4 border-t border-[rgba(255,255,255,0.07)] flex items-center justify-between">
           <span
             className="text-[10px] font-mono text-[#6a6a88]"
@@ -243,7 +277,6 @@ export default function ProjectModal({ project, onClose }: Props) {
         </div>
       </div>
 
-      {/* Image lightbox */}
       {zoomedImage && (
         <div
           className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-8 bg-[rgba(4,4,10,0.95)] backdrop-blur-md"
