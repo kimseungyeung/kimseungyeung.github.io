@@ -261,12 +261,11 @@ export const projects: Project[] = [
     responsibilities: ['Android WebView 개발', '카메라 기능 구현'],
     tags: ['android', 'webview'],
     accentColor: '#f59e0b',
-    thumbnail: '/img/ok부동산/캡처 1.PNG',
+    thumbnail: '/img/ok부동산/캡처 1.png',
     images: [
       '/img/ok부동산/캡처 1.png',
       '/img/ok부동산/캡처 2.png',
       '/img/ok부동산/캡처 3.png',
-      '/img/ok부동산/캡처 4.png',
     ],
   },
 
@@ -287,11 +286,10 @@ export const projects: Project[] = [
     responsibilities: ['Android WebView 개발', '카메라 기능 구현'],
     tags: ['android', 'webview'],
     accentColor: '#10b981',
-    thumbnail: '/img/거래청/캡처 3.png',
+    thumbnail: '/img/거래청/캡처 1.png',
     images: [
       '/img/거래청/캡처 1.png',
       '/img/거래청/캡처 2.png',
-      '/img/거래청/캡처 3.png',
     ],
   },
 
@@ -344,9 +342,8 @@ export const projects: Project[] = [
     responsibilities: ['Android WebView 개발', '카메라 기능 구현'],
     tags: ['android', 'webview'],
     accentColor: '#6366f1',
-    thumbnail: '/img/한성특장/캡처.PNG',
+    thumbnail: '/img/한성특장/캡처 1.png',
     images: [
-      '/img/한성특장/캡처.PNG',
       '/img/한성특장/캡처 1.png',
       '/img/한성특장/캡처 2.png',
       '/img/한성특장/캡처 3.png',
@@ -419,12 +416,15 @@ export const projects: Project[] = [
     ],
     tags: ['android', 'ios', 'webview'],
     accentColor: '#f59e0b',
-    thumbnail: '/img/치과신호등/캡처1.PNG',
+    thumbnail: '/img/치과신호등/screen-0 2.png',
     images: [
-      '/img/치과신호등/캡처1.PNG',
-      '/img/치과신호등/screen-0.png',
-      '/img/치과신호등/캡처2.PNG',
-      '/img/치과신호등/캡처3.PNG',
+      '/img/치과신호등/screen-0 1.png',
+      '/img/치과신호등/캡처1 1.png',
+      '/img/치과신호등/캡처2 1.png',
+      '/img/치과신호등/캡처3 1.png',
+      '/img/치과신호등/캡처4 1.png',
+      '/img/치과신호등/캡처5 1.png',
+      '/img/치과신호등/캡처6 1.png',
     ],
   },
 
@@ -445,12 +445,10 @@ export const projects: Project[] = [
     responsibilities: ['Android WebView 개발', '카메라 기능 구현'],
     tags: ['android', 'webview'],
     accentColor: '#8b5cf6',
-    thumbnail: '/img/TTR/캡처.PNG',
+    thumbnail: '/img/TTR/캡처 1.png',
     images: [
-      '/img/TTR/캡처.PNG',
       '/img/TTR/캡처 1.png',
       '/img/TTR/캡처 2.png',
-      '/img/TTR/캡처 3.png',
     ],
   },
 
@@ -472,12 +470,10 @@ export const projects: Project[] = [
     technicalExperience: ['Socket.IO 실시간 통신 구현'],
     tags: ['android'],
     accentColor: '#00d4ff',
-    thumbnail: '/img/미션/캡처.PNG',
+    thumbnail: '/img/미션/캡처 1.png',
     images: [
-      '/img/미션/캡처.PNG',
       '/img/미션/캡처 1.png',
       '/img/미션/캡처 2.png',
-      '/img/미션/캡처 3.png',
     ],
   },
 
@@ -505,12 +501,6 @@ export const projects: Project[] = [
     technicalExperience: ['ESB 연동', 'Spring MVC Controller 수정 작업'],
     tags: ['android', 'backend'],
     accentColor: '#6366f1',
-    thumbnail: '/img/고객 관리 시스템/1.png',
-    images: [
-      '/img/고객 관리 시스템/1.png',
-      '/img/고객 관리 시스템/2.png',
-      '/img/고객 관리 시스템/3.png',
-    ],
   },
 
   {
