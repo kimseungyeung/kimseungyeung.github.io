@@ -96,7 +96,6 @@ export const projects: Project[] = [
     thumbnail: '/img/슈퍼카 네이티브/sura_1.png',
     images: [
       '/img/슈퍼카 네이티브/sura_1.png',
-      '/img/슈퍼카 네이티브/sura_2.png',
       '/img/슈퍼카 네이티브/sura_3.png',
       '/img/슈퍼카 네이티브/sura_4.png',
       '/img/슈퍼카 네이티브/sura_5.png',
