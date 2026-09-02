@@ -59,7 +59,7 @@ function PersonalCard({ project, onSelect }: { project: Project; onSelect: (p: P
       {project.thumbnail && (
         <div className="-mx-6 -mt-6 mb-5 h-44 bg-[#06060f] overflow-hidden relative">
           <img
-            src={src}
+            src={project.thumbnail}
             alt={project.name}
             className="w-full h-full object-contain"
           />
