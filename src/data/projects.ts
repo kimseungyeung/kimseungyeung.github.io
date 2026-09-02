@@ -261,9 +261,8 @@ export const projects: Project[] = [
     responsibilities: ['Android WebView 개발', '카메라 기능 구현'],
     tags: ['android', 'webview'],
     accentColor: '#f59e0b',
-    thumbnail: '/img/ok부동산/캡처.PNG',
+    thumbnail: '/img/ok부동산/캡처 1.PNG',
     images: [
-      '/img/ok부동산/캡처.PNG',
       '/img/ok부동산/캡처 1.png',
       '/img/ok부동산/캡처 2.png',
       '/img/ok부동산/캡처 3.png',
@@ -288,9 +287,8 @@ export const projects: Project[] = [
     responsibilities: ['Android WebView 개발', '카메라 기능 구현'],
     tags: ['android', 'webview'],
     accentColor: '#10b981',
-    thumbnail: '/img/거래청/캡처.PNG',
+    thumbnail: '/img/거래청/캡처 3.png',
     images: [
-      '/img/거래청/캡처.PNG',
       '/img/거래청/캡처 1.png',
       '/img/거래청/캡처 2.png',
       '/img/거래청/캡처 3.png',
