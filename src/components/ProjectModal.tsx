@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import type { Project } from '../types';
 
 interface Props {
@@ -7,16 +7,30 @@ interface Props {
 }
 
 export default function ProjectModal({ project, onClose }: Props) {
+  const [zoomedImage, setZoomedImage] = useState<string | null>(null);
+
   useEffect(() => {
     if (!project) return;
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      if (zoomedImage) {
+        setZoomedImage(null);
+      } else {
+        onClose();
+      }
+    };
     document.addEventListener('keydown', onKey);
     document.body.style.overflow = 'hidden';
     return () => {
       document.removeEventListener('keydown', onKey);
       document.body.style.overflow = '';
     };
-  }, [project, onClose]);
+  }, [project, onClose, zoomedImage]);
+
+  // 프로젝트가 바뀌면 확대 상태 초기화
+  useEffect(() => {
+    setZoomedImage(null);
+  }, [project]);
 
   if (!project) return null;
 
@@ -40,7 +54,6 @@ export default function ProjectModal({ project, onClose }: Props) {
           className="flex-shrink-0 p-6 md:p-8 border-b border-[rgba(255,255,255,0.07)]"
           style={{ borderTopColor: accent, borderTopWidth: 1 }}
         >
-          {/* Type badge */}
           <div className="flex items-center gap-2 mb-3">
             <span
               className="text-[9px] font-mono tracking-widest px-2 py-1 rounded-sm"
@@ -81,7 +94,6 @@ export default function ProjectModal({ project, onClose }: Props) {
             </button>
           </div>
 
-          {/* Platform tags */}
           <div className="flex flex-wrap gap-1.5 mt-4">
             {project.platform.map((p) => (
               <span
@@ -126,7 +138,7 @@ export default function ProjectModal({ project, onClose }: Props) {
                 </h4>
               </div>
               <div
-                className="flex gap-3 overflow-x-auto pb-2 -mx-6 md:-mx-8 px-6 md:px-8"
+                className="flex gap-3 overflow-x-auto overflow-y-hidden pb-2 -mx-6 md:-mx-8 px-6 md:px-8"
                 style={{ scrollbarWidth: 'none' }}
               >
                 {project.images.map((src, i) => (
@@ -137,7 +149,8 @@ export default function ProjectModal({ project, onClose }: Props) {
                     <img
                       src={src}
                       alt={`${project.name} ${i + 1}`}
-                      className="h-full w-auto max-w-xs object-contain"
+                      className="h-full w-auto object-contain cursor-zoom-in transition-transform duration-150 hover:scale-[1.02]"
+                      onClick={() => setZoomedImage(src)}
                     />
                   </div>
                 ))}
@@ -145,12 +158,10 @@ export default function ProjectModal({ project, onClose }: Props) {
             </div>
           )}
 
-          {/* Overview */}
           <Section title="Overview" accent={accent}>
             <p className="text-[#9090b0] text-sm leading-relaxed">{project.overview}</p>
           </Section>
 
-          {/* Tech Stack */}
           <Section title="Tech Stack" accent={accent}>
             <div className="flex flex-wrap gap-2">
               {project.techStack.map((tech) => (
@@ -165,7 +176,6 @@ export default function ProjectModal({ project, onClose }: Props) {
             </div>
           </Section>
 
-          {/* Key Features */}
           {project.keyFeatures.length > 0 && (
             <Section title="Key Features" accent={accent}>
               <ul className="space-y-2">
@@ -179,7 +189,6 @@ export default function ProjectModal({ project, onClose }: Props) {
             </Section>
           )}
 
-          {/* Responsibilities */}
           {project.responsibilities.length > 0 && (
             <Section title="Responsibilities" accent={accent}>
               <ul className="space-y-2">
@@ -193,7 +202,6 @@ export default function ProjectModal({ project, onClose }: Props) {
             </Section>
           )}
 
-          {/* Technical Experience */}
           {project.technicalExperience && project.technicalExperience.length > 0 && (
             <Section title="Technical Experience" accent={accent}>
               <div className="space-y-2">
@@ -210,7 +218,6 @@ export default function ProjectModal({ project, onClose }: Props) {
             </Section>
           )}
 
-          {/* Contribution if present */}
           {project.contribution && (
             <Section title="Contribution" accent={accent}>
               <p className="text-[#9090b0] text-sm">{project.contribution}</p>
@@ -235,6 +242,27 @@ export default function ProjectModal({ project, onClose }: Props) {
           </button>
         </div>
       </div>
+
+      {/* Image lightbox */}
+      {zoomedImage && (
+        <div
+          className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-8 bg-[rgba(4,4,10,0.95)] backdrop-blur-md"
+          onClick={() => setZoomedImage(null)}
+        >
+          <img
+            src={zoomedImage}
+            alt="확대된 스크린샷"
+            className="max-w-full max-h-full object-contain"
+            onClick={(e) => e.stopPropagation()}
+          />
+          <button
+            onClick={() => setZoomedImage(null)}
+            className="absolute top-4 right-4 sm:top-6 sm:right-6 w-9 h-9 flex items-center justify-center text-[#eeeef8] border border-[rgba(255,255,255,0.2)] hover:border-[rgba(255,255,255,0.5)] rounded-sm transition-all"
+          >
+            ✕
+          </button>
+        </div>
+      )}
     </div>
   );
 }
