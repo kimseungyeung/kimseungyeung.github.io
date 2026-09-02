@@ -328,7 +328,6 @@ export const projects: Project[] = [
       '/img/ABYS/abys_1.png',
       '/img/ABYS/abys_2.png',
       '/img/ABYS/abys_3.png',
-      '/img/ABYS/abys_4.png',
     ],
   },
 
