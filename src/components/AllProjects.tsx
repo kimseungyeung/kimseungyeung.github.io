@@ -3,9 +3,8 @@ import { projects } from '../data/projects';
 import type { FilterTag, Project } from '../types';
 import { SectionHeader } from './About';
 
-const FILTERS: { label: string; value: FilterTag }[] = [
+const TAG_FILTERS: { label: string; value: FilterTag }[] = [
   { label: 'ALL', value: 'all' },
-  { label: 'PERSONAL', value: 'personal' },
   { label: 'ANDROID', value: 'android' },
   { label: 'iOS', value: 'ios' },
   { label: 'WEB', value: 'web' },
@@ -15,80 +14,131 @@ const FILTERS: { label: string; value: FilterTag }[] = [
   { label: 'BACKEND', value: 'backend' },
 ];
 
+// 데이터에서 회사 목록을 자동 추출 (순서는 최근 재직순 유지하려면 수동 배열도 가능)
+const COMPANIES = Array.from(
+  new Set(
+    projects
+      .filter((p) => p.type === 'company')
+      .map((p) => p.company)
+      .filter((c): c is string => !!c),
+  ),
+);
+
 interface Props {
   onSelect: (project: Project) => void;
-  companyFilter: string | null;
-  onClearCompanyFilter: () => void;
+  companyFilter: string | null; // null = 전체, 'personal' = 개인 프로젝트
+  onCompanyFilterChange: (company: string | null) => void;
 }
 
-export default function AllProjects({ onSelect, companyFilter, onClearCompanyFilter }: Props) {
-  const [activeFilter, setActiveFilter] = useState<FilterTag>('all');
+export default function AllProjects({ onSelect, companyFilter, onCompanyFilterChange }: Props) {
+  const [activeTag, setActiveTag] = useState<FilterTag>('all');
 
-  // 회사 필터가 새로 들어오면 태그 필터는 초기화해서 서로 안 꼬이게 함
+  // 외부(About 더보기)에서 회사 필터가 바뀌면 태그 필터는 초기화
   useEffect(() => {
-    if (companyFilter) setActiveFilter('all');
+    setActiveTag('all');
   }, [companyFilter]);
 
   const filtered = useMemo(() => {
     let base = projects;
-    if (companyFilter) {
+    if (companyFilter === 'personal') {
+      base = base.filter((p) => p.type === 'personal');
+    } else if (companyFilter) {
       base = base.filter((p) => p.company === companyFilter);
     }
-    if (activeFilter === 'all') return base;
-    return base.filter((p) => p.tags.includes(activeFilter));
-  }, [activeFilter, companyFilter]);
+    if (activeTag === 'all') return base;
+    return base.filter((p) => p.tags.includes(activeTag));
+  }, [activeTag, companyFilter]);
 
   return (
     <section id="projects" className="py-24 md:py-32 bg-[#0a0a14]">
       <div className="max-w-6xl mx-auto px-6 md:px-8">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
           <SectionHeader index="04" title="All Projects" />
           <p className="text-sm text-[#6a6a88]">
             {filtered.length} project{filtered.length !== 1 ? 's' : ''}
           </p>
         </div>
 
-        {/* 회사 필터 배지 */}
-        {companyFilter && (
-          <div className="flex items-center gap-2 mb-6">
-            <span
-              className="text-[10px] font-mono tracking-widest px-2 py-1 rounded-sm bg-[#00d4ff] text-[#07070f]"
-              style={{ fontFamily: 'var(--font-mono)' }}
-            >
-              {companyFilter}
-            </span>
+        {/* 1차 필터: 회사별 */}
+        <div className="mb-4">
+          <p
+            className="text-[10px] font-mono tracking-widest text-[#6a6a88] mb-2"
+            style={{ fontFamily: 'var(--font-mono)' }}
+          >
+            COMPANY
+          </p>
+          <div className="flex flex-wrap gap-2">
             <button
-              onClick={onClearCompanyFilter}
-              className="text-[10px] font-mono tracking-widest text-[#6a6a88] hover:text-[#eeeef8] transition-colors"
-              style={{ fontFamily: 'var(--font-mono)' }}
-            >
-              전체 보기 ✕
-            </button>
-          </div>
-        )}
-
-        {/* Filters */}
-        <div className="flex flex-wrap gap-2 mb-10">
-          {FILTERS.map((f) => (
-            <button
-              key={f.value}
-              onClick={() => setActiveFilter(f.value)}
+              onClick={() => onCompanyFilterChange(null)}
               className={`px-3 py-1.5 text-[10px] font-mono tracking-widest rounded-sm transition-all duration-200 ${
-                activeFilter === f.value
+                companyFilter === null
                   ? 'bg-[#00d4ff] text-[#07070f]'
                   : 'border border-[rgba(255,255,255,0.1)] text-[#6a6a88] hover:border-[rgba(255,255,255,0.25)] hover:text-[#eeeef8]'
               }`}
               style={{ fontFamily: 'var(--font-mono)' }}
             >
-              {f.label}
+              ALL
             </button>
-          ))}
+            {COMPANIES.map((company) => (
+              <button
+                key={company}
+                onClick={() => onCompanyFilterChange(company)}
+                className={`px-3 py-1.5 text-[10px] font-mono tracking-widest rounded-sm transition-all duration-200 ${
+                  companyFilter === company
+                    ? 'bg-[#00d4ff] text-[#07070f]'
+                    : 'border border-[rgba(255,255,255,0.1)] text-[#6a6a88] hover:border-[rgba(255,255,255,0.25)] hover:text-[#eeeef8]'
+                }`}
+                style={{ fontFamily: 'var(--font-mono)' }}
+              >
+                {company}
+              </button>
+            ))}
+            <button
+              onClick={() => onCompanyFilterChange('personal')}
+              className={`px-3 py-1.5 text-[10px] font-mono tracking-widest rounded-sm transition-all duration-200 ${
+                companyFilter === 'personal'
+                  ? 'bg-[#00d4ff] text-[#07070f]'
+                  : 'border border-[rgba(255,255,255,0.1)] text-[#6a6a88] hover:border-[rgba(255,255,255,0.25)] hover:text-[#eeeef8]'
+              }`}
+              style={{ fontFamily: 'var(--font-mono)' }}
+            >
+              PERSONAL
+            </button>
+          </div>
+        </div>
+
+        {/* 2차 필터: 플랫폼/유형 */}
+        <div className="mb-10">
+          <p
+            className="text-[10px] font-mono tracking-widest text-[#6a6a88] mb-2"
+            style={{ fontFamily: 'var(--font-mono)' }}
+          >
+            PLATFORM
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {TAG_FILTERS.map((f) => (
+              <button
+                key={f.value}
+                onClick={() => setActiveTag(f.value)}
+                className={`px-3 py-1.5 text-[10px] font-mono tracking-widest rounded-sm transition-all duration-200 ${
+                  activeTag === f.value
+                    ? 'bg-[#00d4ff] text-[#07070f]'
+                    : 'border border-[rgba(255,255,255,0.1)] text-[#6a6a88] hover:border-[rgba(255,255,255,0.25)] hover:text-[#eeeef8]'
+                }`}
+                style={{ fontFamily: 'var(--font-mono)' }}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Grid */}
         {filtered.length === 0 ? (
-          <div className="text-center py-16 text-[#6a6a88] font-mono text-sm"
-            style={{ fontFamily: 'var(--font-mono)' }}>
+          <div
+            className="text-center py-16 text-[#6a6a88] font-mono text-sm"
+            style={{ fontFamily: 'var(--font-mono)' }}
+          >
             No projects in this category.
           </div>
         ) : (
@@ -119,11 +169,7 @@ function ProjectCard({ project, onSelect }: { project: Project; onSelect: (p: Pr
 
       {project.thumbnail && (
         <div className="-mx-5 -mt-5 mb-4 h-32 bg-[#06060f] overflow-hidden">
-          <img
-            src={project.thumbnail}
-            alt={project.name}
-            className="w-full h-full object-contain"
-          />
+          <img src={project.thumbnail} alt={project.name} className="w-full h-full object-contain" />
         </div>
       )}
 
@@ -170,9 +216,7 @@ function ProjectCard({ project, onSelect }: { project: Project; onSelect: (p: Pr
         </span>
       </div>
 
-      <p className="text-xs text-[#6a6a88] leading-relaxed mb-4 flex-1">
-        {project.shortDescription}
-      </p>
+      <p className="text-xs text-[#6a6a88] leading-relaxed mb-4 flex-1">{project.shortDescription}</p>
 
       <div className="flex flex-wrap gap-1.5 mt-auto">
         {project.tags
