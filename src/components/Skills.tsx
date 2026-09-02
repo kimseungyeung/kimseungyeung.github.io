@@ -18,7 +18,7 @@ export default function Skills() {
           className="mt-10 text-[11px] font-mono text-[#6a6a88] tracking-wide"
           style={{ fontFamily: 'var(--font-mono)' }}
         >
-          * Web/Service 기술은 실제 개인 프로젝트에서 사용한 기술만 포함
+          * 기술 스택은 실무 및 개인 프로젝트에서 직접 경험한 기술을 기준으로 정리했습니다.
         </p>
       </div>
     </section>
