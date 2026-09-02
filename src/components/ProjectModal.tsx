@@ -135,7 +135,7 @@ export default function ProjectModal({ project, onClose }: Props) {
                     className="flex-shrink-0 h-60 bg-[#06060f] rounded-sm border border-[rgba(255,255,255,0.06)] overflow-hidden flex items-center justify-center"
                   >
                     <img
-                      src={`${import.meta.env.BASE_URL}${src.replace(/^\/+/, '')}`}
+                      src={src}
                       alt={`${project.name} ${i + 1}`}
                       className="h-full w-auto max-w-xs object-contain"
                     />
