@@ -7,7 +7,9 @@ export type FilterTag =
   | 'webview'
   | 'vehicle'
   | 'hardware'
-  | 'backend';
+  | 'backend'
+  | 'ai'
+  | 'automation';
 
 export interface Project {
   id: string;
