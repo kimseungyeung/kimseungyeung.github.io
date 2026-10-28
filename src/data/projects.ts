@@ -851,7 +851,7 @@ export const projects: Project[] = [
     tags: ['web', 'ai', 'automation', 'personal'],
     isFeatured: false,
     accentColor: '#2563eb',
-    thumbnail: '/img/automation/drive_automation_1.png',
+    thumbnail: '/img/automation/automation_drive_1.png',
     images: [
       '/img/automation/automation_drive_1.png',
       '/img/automation/automation_2.png',
