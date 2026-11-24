@@ -54,8 +54,9 @@ export default function Hero() {
           className="max-w-xl text-base md:text-lg text-[#9090b0] leading-relaxed mb-12"
           style={{ fontFamily: 'var(--font-body)' }}
         >
-          Android Native 개발 7년의 경험을 바탕으로 iOS, Flutter,
-          WebView, 차량/하드웨어 및 Backend까지 확장해 온 모바일 개발자입니다.
+          Android Native 개발 경험을 중심으로 iOS, Flutter,
+          WebView 및 차량/하드웨어 연동과 Firebase 기반 서비스 개발까지
+          경험한 모바일 개발자입니다.
         </p>
 
         {/* CTA row */}
