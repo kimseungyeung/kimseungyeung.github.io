@@ -505,6 +505,7 @@ export const projects: Project[] = [
     ],
     technicalExperience: ['ESB 연동', 'Spring MVC Controller 수정 작업'],
     tags: ['android', 'backend'],
+    isFeatured: true,
     accentColor: '#6366f1',
   },
 
@@ -531,6 +532,7 @@ export const projects: Project[] = [
     ],
     technicalExperience: ['DL4J 딥러닝 라이브러리 적용', 'Thymeleaf 서버사이드 렌더링'],
     tags: ['backend'],
+    isFeatured: false,
     accentColor: '#f59e0b',
   },
 
@@ -557,6 +559,7 @@ export const projects: Project[] = [
     ],
     technicalExperience: ['DL4J 딥러닝 적용', 'Spring Boot 웹 개발'],
     tags: ['backend'],
+    isFeatured: false,
     accentColor: '#10b981',
   },
 
@@ -762,7 +765,7 @@ export const projects: Project[] = [
       '다국어 콘텐츠 표시 구조 구현',
     ],
     tags: ['web'],
-    isFeatured: true,
+    isFeatured: false,
     accentColor: '#9f7a45',
     thumbnail: '/img/bondelavie/bondelavie_1.png',
     images: [
@@ -801,7 +804,7 @@ export const projects: Project[] = [
       '오프라인/동기화 상태를 고려한 데이터 관리',
     ],
     tags: ['android', 'personal'],
-    isFeatured: true,
+    isFeatured: false,
     accentColor: '#4f46e5',
     thumbnail: '/img/모노머니앱/monomoney_1.png',
     images: [
@@ -878,7 +881,7 @@ export const projects: Project[] = [
       '비동기 작업 및 실패 상황을 고려한 자동화 처리',
     ],
     tags: ['web', 'ai', 'automation', 'personal'],
-    isFeatured: true,
+    isFeatured: false,
     accentColor: '#0f766e',
     thumbnail: '/img/automation/automation_1.png',
     images: [
@@ -981,7 +984,7 @@ export const projects: Project[] = [
     '네이티브 Android와 Flutter의 구조적 차이 분석'
   ],
   tags: ['flutter', 'android', 'ios', 'ai', 'personal'],
-  isFeatured: true,
+  isFeatured: false,
   accentColor: '#02569B',
   thumbnail: '/img/모노머니앱/monomoney_1.png',
   images: [
