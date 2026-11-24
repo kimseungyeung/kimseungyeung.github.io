@@ -9,6 +9,7 @@ export type FilterTag =
   | 'hardware'
   | 'backend'
   | 'ai'
+  | 'flutter'
   | 'automation';
 
 export interface Project {
