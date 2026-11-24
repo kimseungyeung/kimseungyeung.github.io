@@ -994,7 +994,6 @@ export const projects: Project[] = [
 },
 ];
 
-
 export const featuredProjects = projects.filter((p) => p.isFeatured);
 export const personalProjects = projects.filter((p) => p.type === 'personal');
 export const companyProjects = projects.filter((p) => p.type === 'company');
