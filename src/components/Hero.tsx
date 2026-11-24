@@ -36,14 +36,16 @@ export default function Hero() {
             className="text-sm font-mono text-[#6a6a88] tracking-[0.15em]"
             style={{ fontFamily: 'var(--font-mono)' }}
           >
-            iOS / Android Developer
+            Android / iOS / Flutter Developer
           </span>
+
           <span className="w-px h-4 bg-[rgba(255,255,255,0.2)]" />
+
           <span
             className="text-sm font-mono text-[#6a6a88] tracking-[0.1em]"
             style={{ fontFamily: 'var(--font-mono)' }}
           >
-            Mobile · Vehicle · Web
+            Native · Cross-Platform · Vehicle
           </span>
         </div>
 
@@ -52,8 +54,8 @@ export default function Hero() {
           className="max-w-xl text-base md:text-lg text-[#9090b0] leading-relaxed mb-12"
           style={{ fontFamily: 'var(--font-body)' }}
         >
-          Android Native을 중심으로 iOS, WebView, 차량/하드웨어, Backend까지
-          경험한 모바일 개발자입니다.
+          Android Native 개발 7년의 경험을 바탕으로 iOS, Flutter,
+          WebView, 차량/하드웨어 및 Backend까지 확장해 온 모바일 개발자입니다.
         </p>
 
         {/* CTA row */}
@@ -92,7 +94,10 @@ export default function Hero() {
         <div className="mt-16 flex flex-wrap gap-2">
           {[
             'Kotlin',
+            'Java',
             'Swift',
+            'Dart',
+            'Flutter',
             'Jetpack Compose',
             'SwiftUI',
             'MVVM',
