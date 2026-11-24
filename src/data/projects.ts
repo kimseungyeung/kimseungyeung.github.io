@@ -182,6 +182,7 @@ export const projects: Project[] = [
     ],
     technicalExperience: ['Socket.IO 실시간 채팅 구현', '인앱 결제 및 소셜 로그인 구현'],
     tags: ['android'],
+    isFeatured: true,
     accentColor: '#6366f1',
     thumbnail: '/img/GCO/gco_thumbnail.png',
     images: [
